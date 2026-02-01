@@ -1,5 +1,5 @@
 {
-    "name": "Sonoff LAN",
+    "name": "Sonoff LAN Friendly Entity IDs",
     "homeassistant": "2023.2.0",
     "render_readme": true
 }

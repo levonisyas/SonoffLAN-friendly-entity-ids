@@ -31,6 +31,51 @@ NAMES = {
     "pulseWidth": "INCHING Duration",
 }
 
+def clean_device_name(name: str) -> str:
+    """Clean user-defined device name for use in entity IDs.
+
+    - Preserves Turkish characters by mapping them to ASCII equivalents
+    - Replaces any non [a-z0-9_] chars with underscore
+    - Collapses repeated underscores
+    """
+    tr_map = str.maketrans(
+        {
+            "Ü": "U",
+            "İ": "I",
+            "Ğ": "G",
+            "Ş": "S",
+            "Ç": "C",
+            "Ö": "O",
+            "ü": "u",
+            "ı": "i",
+            "ğ": "g",
+            "ş": "s",
+            "ç": "c",
+            "ö": "o",
+        }
+    )
+
+    s = (name or "").translate(tr_map).lower()
+
+    out = []
+    prev_us = False
+    for ch in s:
+        ok = ("a" <= ch <= "z") or ("0" <= ch <= "9") or ch == "_"
+        if ok:
+            if ch == "_":
+                if not prev_us:
+                    out.append("_")
+                prev_us = True
+            else:
+                out.append(ch)
+                prev_us = False
+        else:
+            if not prev_us:
+                out.append("_")
+                prev_us = True
+
+    slug = "".join(out).strip("_")
+    return slug or "device"
 
 class XEntity(Entity):
     event: bool = False  # if True - skip set_state on entity init
@@ -39,6 +84,41 @@ class XEntity(Entity):
     uid: str = None
 
     _attr_should_poll = False
+    def __setattr__(self, name, value):
+        super().__setattr__(name, value)
+
+        # XSwitches overwrites _attr_unique_id after XEntity.__init__ (for channels).
+        # Keep entity_id/object_id in sync without touching switch.py.
+        if name == "_attr_unique_id":
+            try:
+                self._apply_friendly_object_id()
+            except Exception:
+                # don't break entity init on any edge case
+                pass
+
+    def _apply_friendly_object_id(self) -> None:
+        """Set suggested_object_id and entity_id using friendly device name + eWeLink deviceid.
+
+        Examples:
+          - switch.sonoff_salon_lamba_1000xxx
+          - switch.sonoff_salon_lamba_1000xxx_1
+          - sensor.sonoff_salon_lamba_1000xxx_power
+        """
+        deviceid = self.device["deviceid"]
+        device_slug = clean_device_name(self.device.get("name", ""))
+
+        # Extract suffix from unique_id: 1000xxx_1 -> "1", 1000xxx_power -> "power"
+        tail = None
+        uid = getattr(self, "_attr_unique_id", None)
+        if isinstance(uid, str) and uid.startswith(f"{deviceid}_"):
+            tail = uid[len(deviceid) + 1 :]
+
+        object_id = f"sonoff_{device_slug}_{deviceid}"
+        if tail:
+            object_id = f"{object_id}_{tail}"
+
+        self._attr_suggested_object_id = object_id
+        self.entity_id = f"{DOMAIN}.{object_id}"
 
     def __init__(self, ewelink: XRegistry, device: XDevice) -> None:
         self.ewelink = ewelink
@@ -65,8 +145,9 @@ class XEntity(Entity):
             self._attr_name = device["name"]
             self._attr_unique_id = device["deviceid"]
 
-        # domain will be replaced in entity_registry.async_generate_entity_id
-        self.entity_id = f"{DOMAIN}.{DOMAIN}_{self._attr_unique_id.lower()}"
+        # For new installs / newly added devices: use friendly name + deviceid (+ tail like _1/_power)
+        # NOTE: unique_id stays unchanged for backward compatibility.
+        self._apply_friendly_object_id()
 
         deviceid: str = device["deviceid"]
         params: dict = device["params"]
