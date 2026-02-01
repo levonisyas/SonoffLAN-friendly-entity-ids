@@ -1,5 +1,5 @@
 
-# Sonoff LAN Friendly Entity IDs (Fork)
+# Sonoff LAN Friendly Entity IDs (fork of AlexxIT/SonoffLAN)
 
 >This is a fork of the original [AlexxIT/SonoffLAN](https://github.com/AlexxIT/SonoffLAN) integration.
 
