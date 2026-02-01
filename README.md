@@ -5,8 +5,8 @@
 
 The purpose of this fork is to improve entity_id readability in Home Assistant by adding the device friendly name into the generated entity IDs.
 
-**This fork does not modify unique_id values. Existing installations remain unaffected.**
-
+>**This fork does not modify unique_id values. Existing installations remain unaffected.**
+>**This fork replaces the original SonoffLAN integration and cannot be installed side-by-side.**
 ---
 
 ## ✨ What This Fork Changes
