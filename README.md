@@ -1,5 +1,5 @@
 
-# Sonoff LAN Friendly Entity IDs (fork of AlexxIT/SonoffLAN)
+# Sonoff LAN Clear IDs (fork of AlexxIT/SonoffLAN)
 
 >This is a fork of the original [AlexxIT/SonoffLAN](https://github.com/AlexxIT/SonoffLAN) integration.
 
@@ -19,7 +19,7 @@ With many devices, this becomes difficult to manage.
 
 This fork generates entity IDs that include the user-defined device name from the eWeLink/Sonoff app:
 
-- `switch.sonoff_salon_lamba_1000xxxx_1`
+- `switch.sonoff_your_device_name_1000xxxx_1`
 
 ---
 
@@ -40,10 +40,10 @@ This fork generates entity IDs that include the user-defined device name from th
 
 | Original Entity ID | New Entity ID |
 |-------------------|--------------|
-| `switch.sonoff_1000xxxx_1` | `switch.sonoff_salon_lamba_1000xxxx_1` |
-| `sensor.sonoff_1000xxxx_power` | `sensor.sonoff_salon_lamba_1000xxxx_power` |
-| `light.sonoff_1000xxxx` | `light.sonoff_salon_lamba_1000xxxx` |
-| `cover.sonoff_1000xxxx` | `cover.sonoff_perde_1000xxxx` |
+| `switch.sonoff_1000xxxx_1` | `switch.sonoff_your_device_name_1000xxxx_1` |
+| `sensor.sonoff_1000xxxx_power` | `sensor.sonoff_your_device_name_1000xxxx_power` |
+| `light.sonoff_1000xxxx` | `light.sonoff_your_device_name_1000xxxx` |
+| `cover.sonoff_1000xxxx` | `cover._your_device_name_1000xxxx` |
 
 ---
 
@@ -55,14 +55,14 @@ This fork generates entity IDs that include the user-defined device name from th
 
 ```
 
-https://github.com/levonisyas/SonoffLAN-friendly-entity-ids
+https://github.com/levonisyas/SonoffLAN-ClearIDS
 
 ```
 
 4. Select category: **Integration**
 5. Search for:
 
-**Sonoff LAN Friendly Entity IDs**
+**Sonoff LAN Clear IDs**
 
 6. Install and restart Home Assistant
 
