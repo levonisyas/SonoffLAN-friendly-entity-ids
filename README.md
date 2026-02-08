@@ -1,5 +1,5 @@
 
-# Sonoff LAN Clear IDs (fork of AlexxIT/SonoffLAN)
+# Sonoff LAN Clear Entity IDs (fork of AlexxIT/SonoffLAN)
 
 >This is a fork of the original [AlexxIT/SonoffLAN](https://github.com/AlexxIT/SonoffLAN) integration.
 
@@ -25,7 +25,7 @@ This fork generates entity IDs that include the user-defined device name from th
 
 ## ✅ Features
 
-- Friendly and readable entity IDs
+- Friendly and readable clear entity IDs
 - Multi-channel device support (`_1`, `_2`, `_3`, `_4`)
 - Turkish character support (ı, İ, ğ, ş, ç, ö, ü)
 - Works across all entity types:
